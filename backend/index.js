@@ -1,5 +1,7 @@
 let mysql = require("mysql");
 let express = require("express");
+require("dotenv").config();
+
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
@@ -10,7 +12,7 @@ app.use(bodyParser.json());
 let connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "!Rund0ntst0p",
+  password: process.env.DB_PASSWORD,
 });
 const headlines = {};
 app.get("/get-headlines", (req, res) => {
