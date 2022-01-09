@@ -12,7 +12,8 @@ import Navbar from "./Navbar";
 // TODO: Add icons for each source
 // TODO: Dont repeat headlines
 const Wrapper = styled.div`
-  display: block;
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
   width: 80%;
   height: 100%;
@@ -122,18 +123,68 @@ const Filters = styled.div`
   font-size: 10px;
   align-items: center;
 `;
-const FilterContainer = styled.div`
+const FilterContainer = styled.span`
   display: flex;
   justify-content: left;
   align-items: center;
   border-radius: 20px;
   flex-wrap: wrap;
 `;
+const keyWords = {
+  //liberal
+  blue: [
+    "harris",
+    "biden",
+    "kamala",
+    "sanders",
+    "pelosi",
+    "obama",
+    "barack",
+    "democrat",
+    "democrats",
+    "left-wing",
+    "blue",
+  ],
+  //conservative
+  red: [
+    "trump",
+    "mccain",
+    "warren",
+    "booker",
+    "gillibrand",
+    "mueller",
+    "republican",
+    "republicans",
+    "j6",
+    "gop",
+    "1-6",
+    "1/6",
+    "trump's",
+    "proud",
+    "boy's",
+  ],
+  //covid
+  green: [
+    "covid",
+    "coronavirus",
+    "pandemic",
+    "virus",
+    "corona",
+    "covid-19",
+    "covid19",
+    "virus'",
+    "cases",
+    "covid-positive",
+  ],
+  //neutral
+  yellow: ["election", "elections", "rigging", "tech", "america", "america."],
+};
 function Home() {
   const [headlines, setHeadlines] = useState([]);
   const [todaysHeadlines, setTodaysHeadlines] = useState(0);
   const [covidWords, setCovidWords] = useState(0);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [sortBySource, setSortBySource] = useState(true);
   const [filteredHeadlines, setFilteredHeadlines] = useState([
     "CNN",
     "Fox",
@@ -146,7 +197,8 @@ function Home() {
     return (
       <FilterContainer
         style={{
-          display: "flex",
+          display: "inline-flex",
+          width: "fit-content",
         }}
       >
         <Filters
@@ -159,6 +211,28 @@ function Home() {
           onClick={() => setKeywordHighlight(!keywordHighlight)}
         >
           Keyword Highlight
+        </Filters>
+      </FilterContainer>
+    );
+  }
+  function Sort() {
+    return (
+      <FilterContainer
+        style={{
+          display: "inline-flex",
+          width: "fit-content",
+        }}
+      >
+        <Filters
+          style={{
+            width: "100px",
+            textAlign: "center",
+            borderColor: sortBySource ? "#7fff00" : "#006400",
+            color: sortBySource ? "#7fff00" : "#006400",
+          }}
+          onClick={() => setSortBySource(!sortBySource)}
+        >
+          Sort By Source
         </Filters>
       </FilterContainer>
     );
@@ -208,54 +282,6 @@ function Home() {
     );
   }
 
-  const keyWords = {
-    //liberal
-    blue: [
-      "harris",
-      "biden",
-      "kamala",
-      "sanders",
-      "pelosi",
-      "obama",
-      "barack",
-      "democrat",
-      "democrats",
-      "left-wing",
-    ],
-    //conservative
-    red: [
-      "trump",
-      "mccain",
-      "warren",
-      "booker",
-      "gillibrand",
-      "mueller",
-      "republican",
-      "republicans",
-      "j6",
-      "gop",
-      "1-6",
-      "1/6",
-      "jan.",
-      "6",
-      "proud",
-      "boy's",
-    ],
-    //covid
-    green: [
-      "covid",
-      "coronavirus",
-      "pandemic",
-      "virus",
-      "corona",
-      "covid-19",
-      "covid19",
-      "virus'",
-      "cases",
-    ],
-    //neutral
-    yellow: ["election", "elections", "rigging"],
-  };
   const keyWordLinks = {
     blue: {
       harris: "https://en.wikipedia.org/wiki/Kamala_Harris",
@@ -495,13 +521,35 @@ function Home() {
   let yyyy = today.getFullYear();
   let date = `${dd}-${mm}-${yyyy}`;
 
+  // get the past 50 days
+  let pastDays = [];
+  for (let i = 0; i < 1; i++) {
+    let date = new Date();
+    date.setDate(date.getDate() - i);
+    let dd = String(date.getDate()).padStart(2, "0");
+    let mm = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
+    let yyyy = date.getFullYear();
+    pastDays.push(`${mm}-${dd}-${yyyy}`);
+  }
+  console.log(pastDays);
+  let pastMonths = [];
+  for (let i = 0; i < 20; i++) {
+    let date = new Date();
+    date.setMonth(date.getMonth() - i);
+    let dd = String(date.getDate()).padStart(2, "0");
+    let mm = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
+    let yyyy = date.getFullYear();
+    //create a regex to see if the month is in the past
+  }
+  console.log(pastMonths);
+
   function TodaysHeadlines() {
     return (
-      <>
+      <span>
         <Header>Today's Headlines</Header>
 
         {headlines.data ? (
-          <>
+          <span>
             {headlines.data.map((headline) => {
               return (
                 //if the date of the headline is today, display it
@@ -509,7 +557,7 @@ function Home() {
                 filteredHeadlines.includes(headline.source) &&
                 (headline.date === `${mm}-${dd}-${yyyy}` ? (
                   <span>
-                    <span>
+                    <div>
                       <HeadlineContainer>
                         <LogoContainer>
                           {displayLogo(headline.source, "50px")}
@@ -525,17 +573,15 @@ function Home() {
                           {}
                         </Headline>
                       </HeadlineContainer>
-                    </span>
+                    </div>
                   </span>
                 ) : //if the date of the headline is not today, don't display it
                 null)
               );
             })}
-          </>
-        ) : (
-          <div>Loading...</div>
-        )}
-      </>
+          </span>
+        ) : null}
+      </span>
     );
   }
   //create a function to display the logo from the source of the headline
@@ -597,8 +643,10 @@ function Home() {
         </span> */}
       {/* {settingsOpen ? <DisplayNewsSourceTags /> : null} */}
       <DisplayNewsSourceTags />
-
-      <KeywordHighlightButton />
+      <span>
+        <KeywordHighlightButton />
+        <Sort />
+      </span>
       {/* </div> */}
       <TodaysHeadlines />
       <Header
@@ -606,43 +654,146 @@ function Home() {
           marginBottom: "10px",
         }}
       >
-        Past Headlines
+        All Headlines
       </Header>
+
       {
         //if the data is not empty
         headlines.data &&
           headlines.data
-            .sort((a, b) => b.id - a.id)
-            //the slice determines the number of headlines to display
-            .slice(todaysHeadlines, 50)
-            .map((headline) => (
-              <HeadlineContainer key={headline.id}>
-                {
-                  //if the date of the headline is today, display it
-                  filteredHeadlines.includes(headline.source) &&
-                    (headline.date !== `${mm}-${dd}-${yyyy}` ? (
-                      <>
-                        <LogoContainer>
-                          {displayLogo(headline.source, "20px")}
-                        </LogoContainer>
-
-                        <Headline
-                          style={{
-                            color: "#C8C8C8		",
-                          }}
-                        >
-                          {headline.headline.split(" ").map((word) => {
-                            return checkIfWordIsKeyWord(word);
-                          })}
-                        </Headline>
-                      </>
-                    ) : //if the date of the headline is not today, don't display it
-                    null)
+            .sort((a, b) => {
+              return b.id - a.id;
+            })
+            .sort((a, b) => {
+              //only if sortbysource is true
+              if (sortBySource) {
+                if (a.source < b.source) {
+                  return -1;
                 }
-              </HeadlineContainer>
+                if (a.source > b.source) {
+                  return 1;
+                }
+                return 0;
+              }
+            })
+            //the slice determines the number of headlines to display
+            // .slice(todaysHeadlines, 50)
+            .map((headline) => (
+              <span
+                key={headline.id}
+                // style={{
+                //   fontSize: "18px",
+                // }}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "left",
+                  alignItems: "center",
+                }}
+              >
+                {filteredHeadlines.includes(headline.source) &&
+                  (headline.date !== `${mm}-${dd}-${yyyy}` ? (
+                    <span
+                      style={{
+                        marginTop: "15px",
+                      }}
+                    >
+                      <LogoContainer>
+                        {displayLogo(headline.source, "20px")}
+                      </LogoContainer>
+
+                      <Headline
+                        style={{
+                          color: "#C8C8C8		",
+                        }}
+                      >
+                        {headline.headline.split(" ").map((word) => {
+                          return checkIfWordIsKeyWord(word);
+                        })}
+                      </Headline>
+                    </span>
+                  ) : //if the date of the headline is not today, don't display it
+                  null)}
+              </span>
             ))
       }
+      {/*
+      <div>
+        {
+          //make headers for the past 50 days
+          pastDays.map((day) => {
+            return (
+              <span>
+                {
+                  //only return if more than one headline is found for that day
+                  headlines.data &&
+                  headlines.data.filter((headline) => headline.date === day)
+                    .length > 0 ? (
+                    <Header
+                      style={{
+                        marginTop: "10px",
+                        marginBottom: "10px",
+                        fontSize: "18px",
+                        textDecoration: "underline",
+                      }}
+                    >
+                      {day}
+                    </Header>
+                  ) : null
+                } */}
+      {/* <>
+                  {
+                    //if any of the headlines are from the past 50 days, display them
+                    headlines.data &&
+                      headlines.data
+                        .sort((a, b) => b.id - a.id)
+                        .map((headline) => (
+                          <span
+                            key={headline.id}
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "left",
+                              alignItems: "center",
+                            }}
+                          >
+                            {filteredHeadlines.includes(headline.source) &&
+                              (headline.date === day ? (
+                                <span
+                                  style={{
+                                    marginTop: "15px",
+                                  }}
+                                >
+                                  <LogoContainer>
+                                    {displayLogo(headline.source, "20px")}
+                                  </LogoContainer>
+
+                                  <Headline
+                                    style={{
+                                      color: "#C8C8C8		",
+                                    }}
+                                  >
+                                    {headline.headline
+                                      .split(" ")
+                                      .map((word) => {
+                                        return checkIfWordIsKeyWord(word);
+                                      })}
+                                  </Headline>
+                                </span>
+                              ) : //if the date of the headline is not today, don't display it
+                              null)}
+                          </span>
+                        ))
+                  }
+                </> */}
+      {/* </span> */}
+      {/* ); */}
+      {/* }) */}
+      {/* } */}
+      {/* </div> */}
     </Wrapper>
   );
 }
 export default Home;
+//export the keyWords object
+export { keyWords };
