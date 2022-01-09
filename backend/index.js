@@ -37,7 +37,7 @@ app.get("/get-headlines", (req, res) => {
 });
 //send the data to the frontend
 
-app.listen(4000, function () {
+app.listen(process.env.PORT || 5000, function () {
   console.log("Server started on port 4000");
   connection.connect(function (err) {
     if (err) throw err;
