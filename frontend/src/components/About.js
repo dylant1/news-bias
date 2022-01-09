@@ -14,9 +14,116 @@ function About() {
   return (
     <div>
       <Header>How it works</Header>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam</p>
+      <ol
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "20px",
+          marginBottom: "35px",
+          marginTop: "20px",
+          color: "grey",
+        }}
+      >
+        <li
+          style={{
+            marginBottom: "20px",
+          }}
+        >
+          A python script scrapes the front page headline from each source every
+          day
+        </li>
+        <li
+          style={{
+            marginBottom: "20px",
+          }}
+        >
+          The script stores the headlines in a MySQL database
+        </li>
+        <li
+          style={{
+            marginBottom: "20px",
+          }}
+        >
+          A backend express server is used to serve the headlines to the
+          frontend
+        </li>
+        <li
+          style={{
+            marginBottom: "20px",
+          }}
+        >
+          The frontend sorts and displays the headlines
+        </li>
+      </ol>
       <Header>Sources</Header>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam</p>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: "50px",
+          color: "grey",
+        }}
+      >
+        <a
+          href="https://www.cnn.com"
+          target="_blank"
+          style={{
+            textDecoration: "underline",
+            color: "grey",
+            marginBottom: "10px",
+          }}
+        >
+          CNN
+        </a>
+        <a
+          href="https://www.foxnews.com"
+          target="_blank"
+          style={{
+            textDecoration: "underline",
+            color: "grey",
+            marginBottom: "10px",
+          }}
+        >
+          Fox News
+        </a>{" "}
+        <a
+          href="https://www.npr.org"
+          target="_blank"
+          style={{
+            textDecoration: "underline",
+            color: "grey",
+            marginBottom: "10px",
+          }}
+        >
+          NPR
+        </a>{" "}
+        <a
+          href="https://www.msnbc.com"
+          target="_blank"
+          style={{
+            textDecoration: "underline",
+            color: "grey",
+            marginBottom: "10px",
+          }}
+        >
+          MSNBC
+        </a>{" "}
+        <a
+          href="https://www.thefederalist.com"
+          target="_blank"
+          style={{
+            textDecoration: "underline",
+            color: "grey",
+            marginBottom: "10px",
+          }}
+        >
+          The Federalist
+        </a>{" "}
+      </div>
       <Header>Links</Header>
       <Header
         style={{
@@ -24,9 +131,18 @@ function About() {
           fontWeight: "normal",
           marginBottom: "20px",
           marginTop: "0px",
+          color: "grey",
         }}
       >
-        <a href="https://www.google.com">Github</a>
+        <a
+          href="https://www.google.com"
+          style={{
+            color: "grey",
+          }}
+          target="_blank"
+        >
+          Github
+        </a>
       </Header>
       <Header></Header>
     </div>
